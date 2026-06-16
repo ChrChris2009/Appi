@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Chat - Application</title>
+    <style>
+        :root {
+            --bg-principal: #070f1e;       
+            --bg-secondaire: #0f1b2f;     
+            --bg-hover: #1b2d4a;
+            --texte-principal: #ffffff;
+            --texte-secondaire: #94a3b8;
+            --or-accent: #d4af37;         
+            --bleu-action: #1da1f2;
+            --bordure: #1e293b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-principal);
+            color: var(--texte-principal);
+        }
+
+        header {
+            background-color: var(--bg-secondaire);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            border-bottom: 1px solid var(--bordure);
+        }
+
+        .logo-zone {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 20px;
+            color: var(--or-accent);
+        }
+
+        .nav-profil {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-statut {
+            font-size: 14px;
+            color: var(--texte-secondaire);
+        }
+
+        .conteneur-principal {
+            margin-top: 70px;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            gap: 20px;
+            height: calc(100vh - 90px);
+        }
+
+        .colonne-gauche {
+            flex: 1;
+            max-width: 280px;
+        }
+
+        .zone-centrale {
+            flex: 2;
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .carte {
+            background-color: var(--bg-secondaire);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--bordure);
+        }
+
+        .menu-item {
+            display: block;
+            padding: 12px;
+            color: var(--texte-principal);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .menu-item:hover, .menu-item.actif {
+            background-color: var(--bg-hover);
+            color: var(--or-accent);
+        }
+
+        .fenetre-chat {
+            background-color: var(--bg-secondaire);
+            border-radius: 12px;
+            border: 1px solid var(--bordure);
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .chat-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--bordure);
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .zone-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message-wrapper {
+            display: flex;
+            flex-direction: column;
+            max-width: 75%;
+        }
+
+        .message-wrapper.recu {
+            align-self: flex-start;
+        }
+
+        .message-wrapper.envoye {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+
+        .message-info {
+            font-size: 11px;
+            color: var(--texte-secondaire);
+            margin-bottom: 4px;
+            padding: 0 5px;
+        }
+
+        .bulle {
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 15px;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .message-wrapper.recu .bulle {
+            background-color: var(--bg-hover);
+            color: var(--texte-principal);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-wrapper.envoye .bulle {
+            background-color: var(--bleu-action);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .barre-envoi {
+            padding: 15px;
+            border-top: 1px solid var(--bordure);
+            display: flex;
+            gap: 10px;
+            background-color: rgba(15, 27, 47, 0.5);
+        }
+
+        .barre-envoi input {
+            flex-grow: 1;
+            margin-bottom: 0;
+        }
+
+        .barre-envoi button {
+            width: auto;
+            padding: 0 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: var(--bg-principal);
+            border: 1px solid var(--bordure);
+            border-radius: 8px;
+            color: white;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--bleu-action);
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--or-accent);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondaire {
+            background-color: transparent;
+            color: var(--texte-secondaire);
+            border: 1px solid var(--bordure);
+            margin-top: 10px;
+        }
+
+        .btn-secondaire:hover {
+            background-color: var(--bg-hover);
+            color: white;
+        }
+
+        .section-vue {
+            display: none;
+            height: 100%;
+        }
+
+        .section-vue.visible {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-zone">
+            <span>💬</span> G-Chat
+        </div>
+        <div class="nav-profil">
+            <span id="txt-statut" class="user-statut">Visiteur anonyme</span>
+        </div>
+    </header>
+
+    <div class="conteneur-principal">
+        
+        <aside class="colonne-gauche">
+            <div class="carte">
+                <div class="menu-item actif" onclick="changerOnglet('general', this)">🌍 Salon Général</div>
+                <div class="menu-item" onclick="changerOnglet('prive', this)">🔒 Message Privé (Sim)</div>
+                <div id="item-connexion-menu" class="menu-item" onclick="changerOnglet('connexion', this)">🔑 Connexion / Profil</div>
+            </div>
+        </aside>
+
+        <main class="zone-centrale">
+
+            <section id="vue-general" class="section-vue visible">
+                <div class="fenetre-chat">
+                    <div class="chat-header">🌍 Salon Public Général</div>
+                    
+                    <div id="messages-general" class="zone-messages">
+                        <div class="message-wrapper recu">
+                            <div class="message-info">Modérateur G • En ligne</div>
+                            <div class="bulle">Bienvenue sur le G-Chat ! Connecte-toi via l'onglet de droite pour personnaliser ton pseudo et envoyer des messages.</div>
+                        </div>
+                    </div>
+
+                    <div class="barre-envoi">
+                        <input type="text" id="input-general" placeholder="Écrire un message dans le salon public..." onkeypress="verifierEntree(event, 'general')">
+                        <button onclick="envoyerMessage('general')" style="background-color: var(--bleu-action); color: white;">Envoyer</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="vue-prive" class="section-vue">
+                <div class="fenetre-chat">
+                    <div class="chat-header">🔒 Discussion privée avec Alex</div>
+                    
+                    <div id="messages-prive" class="zone-messages">
+                        <div class="message-wrapper recu">
+                            <div class="message-info">Alex • Il y a 5 min</div>
+                            <div class="bulle">Yo ! Tu as pu regarder la structure de la nouvelle application ?</div>
+                        </div>
+                    </div>
+
+                    <div class="barre-envoi">
+                        <input type="text" id="input-prive" placeholder="Envoyer un message privé..." onkeypress="verifierEntree(event, 'prive')">
+                        <button onclick="envoyerMessage('prive')">Envoyer</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="vue-connexion" class="section-vue">
+                <div id="boite-connexion" class="carte">
+                    <h2>🔑 Connexion</h2>
+                    <br>
+                    <form onsubmit="gererConnexion(event)">
+                        <input type="text" id="login-username" placeholder="Choisis ton pseudo (ex: Flacko)" required>
+                        <input type="password" placeholder="Mot de passe (factice)" required>
+                        <button type="submit">Rejoindre le chat</button>
+                    </form>
+                </div>
+
+                <div id="boite-profil" class="carte" style="display: none;">
+                    <h2>👤 Ton Profil de Chat</h2>
+                    <br>
+                    <p>Statut : <span style="color: #4cd137;">En ligne</span></p>
+                    <p id="profil-nom" style="margin-top: 10px; font-size: 18px; font-weight: bold;"></p>
+                    <button onclick="gererDeconnexion()" class="btn-secondaire">Se déconnecter</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        let utilisateurConnecte = null;
+
+        function changerOnglet(idVue, elementMenu) {
+            document.querySelectorAll('.section-vue').forEach(vue => vue.classList.remove('visible'));
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('actif'));
+            
+            document.getElementById('vue-' + idVue).classList.add('visible');
+            elementMenu.classList.add('actif');
+            
+            if(idVue === 'general' || idVue === 'prive') {
+                const zone = document.getElementById('messages-' + idVue);
+                zone.scrollTop = zone.scrollHeight;
+            }
+        }
+
+        function verifierEntree(event, type) {
+            if (event.key === 'Enter') {
+                envoyerMessage(type);
+            }
+        }
+
+        function envoyerMessage(type) {
+            const input = document.getElementById('input-' + type);
+            const contenu = input.value.trim();
+            
+            if (!contents) return;
+
+            const auteur = utilisateurConnecte ? utilisateurConnecte : "Visiteur Anonyme";
+            const zoneMessages = document.getElementById('messages-' + type);
+
+            const nouveauMessage = `
+                <div class="message-wrapper envoye">
+                    <div class="message-info">${auteur} • À l'instant</div>
+                    <div class="bulle">${contenu}</div>
+                </div>
+            `;
+
+            zoneMessages.insertAdjacentHTML('beforeend', nouveauMessage);
+            input.value = ""; 
+            
+            zoneMessages.scrollTop = zoneMessages.scrollHeight;
+
+            if (type === 'prive') {
+                setTimeout(() => {
+                    const reponseAuto = `
+                        <div class="message-wrapper recu">
+                            <div class="message-info">Alex • À l'instant</div>
+                            <div class="bulle">Grave stylé ! Ton script de chat fonctionne à merveille. 🚀</div>
+                        </div>
+                    `;
+                    zoneMessages.insertAdjacentHTML('beforeend', reponseAuto);
+                    zoneMessages.scrollTop = zoneMessages.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        function gererConnexion(event) {
+            event.preventDefault();
+            const pseudo = document.getElementById('login-username').value.trim();
+            utilisateurConnecte = pseudo;
+
+            document.getElementById('txt-statut').innerText = "Connecté : " + pseudo;
+            document.getElementById('profil-nom').innerText = "Bienvenue dans le salon, " + pseudo;
+
+            document.getElementById('boite-connexion').style.display = 'none';
+            document.getElementById('boite-profil').style.display = 'block';
+            document.getElementById('item-connexion-menu').innerText = "👤 " + pseudo;
+            
+            changerOnglet('general', document.querySelector('.menu-item'));
+        }
+
+        function gererDeconnexion() {
+            utilisateurConnecte = null;
+            document.getElementById('txt-statut').innerText = "Visiteur anonyme";
+            document.getElementById('boite-connexion').style.display = 'block';
+            document.getElementById('boite-profil').style.display = 'none';
+            document.getElementById('item-connexion-menu').innerText = "🔑 Connexion / Profil";
+            document.getElementById('login-username').value = "";
+        }
+    </script>
+</body>
+</html>
+
