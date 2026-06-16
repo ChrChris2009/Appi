@@ -1,0 +1,37 @@
+{
+  "app": {
+    "name": "G-Chat",
+    "version": "1.0.0",
+    "environment": "production",
+    "security": {
+      "endToEndEncryption": true,
+      "maxLoginAttempts": 5,
+      "tokenExpiry": "7d"
+    }
+  },
+  "chat": {
+    "media": {
+      "maxImageSizeMb": 16,
+      "maxVideoSizeMb": 64,
+      "allowedExtensions": [".jpg", ".jpeg", ".png", ".gif", ".mp4", ".pdf"]
+    },
+    "features": {
+      "typingIndicator": true,
+      "readReceipts": true,
+      "lastSeen": true,
+      "maxGroupMembers": 256,
+      "messageEditWindowMinutes": 15
+    }
+  },
+  "database": {
+    "useCache": true,
+    "cacheTimeoutMs": 30000,
+    "syncIntervalMs": 5000
+  },
+  "limits": {
+    "maxMessageLength": 4096,
+    "rateLimitWindowMs": 60000,
+    "maxMessagesPerWindow": 100
+  }
+}
+
